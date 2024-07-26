@@ -19,6 +19,7 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -75,82 +76,135 @@ private fun SharedTransitionScope.ListScreen(
     onFavoriteClick: (BrbaCharacter) -> Unit = {},
     onChangeThemeClick: (BrbaThemeMode) -> Unit = {},
 ) {
-    val hazeState: HazeState = remember { HazeState() }
+    val hazeState = remember { HazeState() }
 
     Scaffold(
         topBar = {
-            BrbaTopAppBar(
+            ListTopAppBar(
                 hazeState = hazeState,
-                actions = {
-                    when (uiState) {
-                        is ListUiState.Loading,
-                        is ListUiState.Error,
-                        -> {
-                        }
-
-                        is ListUiState.Success -> {
-                            if (uiState.themeMode != BrbaThemeMode.System) {
-                                val icTheme = if (uiState.themeMode == BrbaThemeMode.Light) {
-                                    io.github.shinhyo.brba.core.designsystem.R.drawable.ic_theme_light
-                                } else {
-                                    io.github.shinhyo.brba.core.designsystem.R.drawable.ic_theme_dark
-                                }
-                                IconButton(
-                                    onClick = { onChangeThemeClick.invoke(uiState.themeMode) },
-                                ) {
-                                    Icon(
-                                        painterResource(id = icTheme),
-                                        contentDescription = "ic_theme",
-                                        tint = MaterialTheme.colorScheme.tertiary,
-                                    )
-                                }
-                            }
-                        }
-                    }
-                },
+                uiState = uiState,
+                onChangeThemeClick = onChangeThemeClick,
             )
         },
         contentWindowInsets = WindowInsets(16.dp, 4.dp, 16.dp, 16.dp),
     ) { contentPadding ->
-
         when (uiState) {
-            is ListUiState.Loading -> {
-                BrBaCircleProgress(modifier)
-            }
+            is ListUiState.Loading -> LoadingContent()
+            is ListUiState.Error -> ErrorContent(uiState.exception)
+            is ListUiState.Success -> SuccessContent(
+                modifier = modifier,
+                animatedVisibilityScope = animatedVisibilityScope,
+                contentPadding = contentPadding,
+                hazeState = hazeState,
+                characters = uiState.characters,
+                onCharacterClick = onCharacterClick,
+                onFavoriteClick = onFavoriteClick,
+            )
+        }
+    }
+}
 
-            is ListUiState.Error -> {
-                uiState.exception?.printStackTrace()
+@Composable
+private fun ListTopAppBar(
+    hazeState: HazeState,
+    uiState: ListUiState,
+    onChangeThemeClick: (BrbaThemeMode) -> Unit,
+) {
+    BrbaTopAppBar(
+        hazeState = hazeState,
+        actions = {
+            if (uiState is ListUiState.Success) {
+                ThemeToggleButton(
+                    themeMode = uiState.themeMode,
+                    onClick = onChangeThemeClick,
+                )
             }
+        },
+    )
+}
 
-            is ListUiState.Success -> {
-                LazyVerticalStaggeredGrid(
-                    horizontalArrangement = Arrangement.spacedBy(6.dp),
-                    verticalItemSpacing = 6.dp,
-                    contentPadding = contentPadding,
-                    columns = StaggeredGridCells.Adaptive(
-                        minSize = 100.dp,
-                    ),
-                    modifier = modifier
-                        .haze(
-                            state = hazeState,
-                            style = HazeDefaults.style(backgroundColor = MaterialTheme.colorScheme.surface),
-                        )
-                        .fillMaxSize(),
-                ) {
-                    items(
-                        items = uiState.characters,
-                        key = { character -> character.charId },
-                    ) { character ->
-                        BrbaCharacterCard(
-                            modifier = Modifier,
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            character = character,
-                            onCharacterClick = onCharacterClick,
-                            onFavoriteClick = onFavoriteClick,
-                        )
-                    }
-                }
-            }
+@Composable
+private fun LoadingContent() {
+    BrBaCircleProgress(Modifier.fillMaxSize())
+}
+
+@Composable
+private fun ErrorContent(exception: Throwable?) {
+    // Display error message
+}
+
+@Composable
+private fun SharedTransitionScope.SuccessContent(
+    modifier: Modifier,
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    contentPadding: PaddingValues,
+    hazeState: HazeState,
+    characters: List<BrbaCharacter>,
+    onCharacterClick: (BrbaCharacter) -> Unit,
+    onFavoriteClick: (BrbaCharacter) -> Unit,
+) {
+    val columns = remember { StaggeredGridCells.Adaptive(minSize = 100.dp) }
+
+    LazyVerticalStaggeredGrid(
+        columns = columns,
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        verticalItemSpacing = 6.dp,
+        contentPadding = contentPadding,
+        modifier = modifier
+            .haze(
+                state = hazeState,
+                style = HazeDefaults.style(backgroundColor = MaterialTheme.colorScheme.surface),
+            )
+            .fillMaxSize(),
+    ) {
+        items(
+            items = characters,
+            key = { it.charId },
+            contentType = { "character" },
+        ) { character ->
+            CharacterCard(
+                animatedVisibilityScope = animatedVisibilityScope,
+                character = character,
+                onCharacterClick = onCharacterClick,
+                onFavoriteClick = onFavoriteClick,
+            )
+        }
+    }
+}
+
+@Composable
+private fun SharedTransitionScope.CharacterCard(
+    animatedVisibilityScope: AnimatedVisibilityScope,
+    character: BrbaCharacter,
+    onCharacterClick: (BrbaCharacter) -> Unit,
+    onFavoriteClick: (BrbaCharacter) -> Unit,
+) {
+    BrbaCharacterCard(
+        modifier = Modifier,
+        animatedVisibilityScope = animatedVisibilityScope,
+        character = character,
+        onCharacterClick = onCharacterClick,
+        onFavoriteClick = onFavoriteClick,
+    )
+}
+
+@Composable
+private fun ThemeToggleButton(
+    themeMode: BrbaThemeMode,
+    onClick: (BrbaThemeMode) -> Unit,
+) {
+    if (themeMode != BrbaThemeMode.System) {
+        val iconRes = if (themeMode == BrbaThemeMode.Light) {
+            io.github.shinhyo.brba.core.designsystem.R.drawable.ic_theme_light
+        } else {
+            io.github.shinhyo.brba.core.designsystem.R.drawable.ic_theme_dark
+        }
+        IconButton(onClick = { onClick(themeMode) }) {
+            Icon(
+                painter = painterResource(id = iconRes),
+                contentDescription = "Change theme",
+                tint = MaterialTheme.colorScheme.tertiary,
+            )
         }
     }
 }
