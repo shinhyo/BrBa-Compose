@@ -1,4 +1,4 @@
-<h1 align="center">Breaking Bad - Jetpack Compose</h1>
+<h1 align="center"> 🧪 Breaking Bad - Jetpack Compose</h1>
 
 <p align="center">
   <a href='https://developer.android.com'><img src='http://img.shields.io/badge/platform-android-green.svg'/></a>
@@ -36,7 +36,7 @@
 - [Coil-Compose](https://coil-kt.github.io/coil/compose)
 - [Timber](https://github.com/JakeWharton/timber)
 - [Haze](https://github.com/chrisbanes/haze)
-- [sharedElement](https://developer.android.com/guide/fragments/animate#shared)
+- [SharedElement](https://developer.android.com/guide/fragments/animate#shared)
 
 ## Multi Module
 
@@ -60,22 +60,5 @@
     └── setting
 ```
 
+## Module Graphs
 ![](project.dot.png)
-
-# License
-
-```xml
-    Designed and developed by 2021 shinhyo
-
-    Licensed under the Apache License, Version 2.0 (the "License");
-    you may not use this file except in compliance with the License.
-    You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing, software
-    distributed under the License is distributed on an "AS IS" BASIS,
-    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-    See the License for the specific language governing permissions and
-    limitations under the License.
-```
