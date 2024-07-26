@@ -23,6 +23,6 @@ internal val Project.androidExtension: CommonExtension<*, *, *, *, *, *>
 internal val Project.libs
     get(): VersionCatalog = extensions.getByType<VersionCatalogsExtension>().named("libs")
 
-internal fun Project.findVersion(alias: String) = libs.findVersion(alias).get()
+internal fun Project.findVersion(alias: String) = libs.findVersion(alias).get().toString()
 
 internal fun Project.findLibrary(alias: String) = libs.findLibrary(alias).get()

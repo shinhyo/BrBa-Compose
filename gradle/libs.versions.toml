@@ -1,14 +1,16 @@
 [versions]
+versionCode = "1"
+versionName = "1.0.0"
 compileSdkVer = "34"
 targetSdkVer = "34"
 minSdkVer = "28"
 
-androidGradlePlugin = "8.5.0"
-androidTools = "31.5.0"
+androidGradlePlugin = "8.5.1"
+androidTools = "31.5.1"
 
 kotlin = "2.0.0"
-#https://github.com/google/ksp/releases
-ksp = "2.0.0-1.0.22"
+# https://github.com/google/ksp/releases
+ksp = "2.0.0-1.0.23"
 androidDesugarJdkLibs = "2.0.4"
 
 kotlinxCoroutines = "1.8.1"
@@ -16,15 +18,15 @@ kotlinxCoroutines = "1.8.1"
 androidxCore = "1.13.1"
 androidxCoreSplashscreen = "1.0.1"
 androidxAppCompat = "1.7.0"
-androidxActivity = "1.9.0"
+androidxActivity = "1.9.1"
 androidxStartup = "1.1.1"
 androidxHiltNavigationCompose = "1.2.0"
 androidxConstraintlayoutCompose = "1.0.1"
-androidxLifecycle = "2.8.2"
+androidxLifecycle = "2.8.4"
 androidxDataStore = "1.1.1"
 
 androidxComposeBom = "2024.06.00"
-androidxCompose = "1.7.0-beta03"
+androidxCompose = "1.7.0-beta06"
 androidxComposeMaterial3 = "1.1.2"
 
 hilt = "2.51.1"
@@ -33,9 +35,9 @@ hiltExt = "1.0.0"
 androidxNavigation = "2.7.7"
 
 junit4 = "4.13.2"
-androidxTestCore = "1.6.0"
-androidxTestExt = "1.2.0"
-androidxEspresso = "3.6.0"
+androidxTestCore = "1.6.1"
+androidxTestExt = "1.2.1"
+androidxEspresso = "3.6.1"
 
 coil = "2.6.0"
 javaxInject = "1"
