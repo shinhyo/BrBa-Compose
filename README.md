@@ -26,7 +26,7 @@
     - App Startup - initialize components at app startup.
 - Clean Architecture (nowinandroid)
 - MVVM pattern
-- Kotlin Coroutines & Flows
+- Kotlin Coroutines & Flows & Serialization
 - Material Design 3
   - [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/)
 - Single Activity
