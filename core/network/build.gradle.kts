@@ -1,5 +1,6 @@
 plugins {
     id("brba.android.library")
+    id("org.jetbrains.kotlin.plugin.serialization")
 }
 
 android {
@@ -11,10 +12,11 @@ android {
 }
 
 dependencies {
-
     implementation(project(":core:model"))
 
+    implementation(libs.kotlinx.serialization.json)
+
     implementation(libs.retrofit)
-    implementation(libs.retrofit.converter.gson)
+    implementation(libs.retrofit.converter.kotlin.serialization)
     implementation(libs.okhttp.logging)
 }

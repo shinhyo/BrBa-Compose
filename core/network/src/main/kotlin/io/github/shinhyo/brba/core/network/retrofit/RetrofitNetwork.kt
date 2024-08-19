@@ -16,16 +16,19 @@
 package io.github.shinhyo.brba.core.network.retrofit
 
 import android.content.Context
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.hilt.android.qualifiers.ApplicationContext
 import io.github.shinhyo.brba.core.network.BuildConfig
 import io.github.shinhyo.brba.core.network.NetworkDataSource
 import io.github.shinhyo.brba.core.network.model.CharacterResponse
+import kotlinx.serialization.json.Json
 import okhttp3.Cache
 import okhttp3.Interceptor
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Response
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import timber.log.Timber
@@ -59,16 +62,16 @@ class RetrofitNetwork @Inject constructor(
                 OkHttpClient.Builder()
                     .apply {
                         if (!BuildConfig.DEBUG) return@apply
-//                        addInterceptor(
-//                            HttpLoggingInterceptor { Timber.tag("OkHttp##\t").d(it) }
-//                                .apply { level = HttpLoggingInterceptor.Level.BODY }
-//                        )
+                        addInterceptor(
+                            HttpLoggingInterceptor { Timber.tag("OkHttp##\t").d(it) }
+                                .apply { level = HttpLoggingInterceptor.Level.BODY },
+                        )
                     }
                     .cache(Cache(context.cacheDir, 5L * 1024 * 1024))
                     .addInterceptor { forceCache(it) }
                     .build(),
             )
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(BaBrApi::class.java)
     }

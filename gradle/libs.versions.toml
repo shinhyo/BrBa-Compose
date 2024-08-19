@@ -15,6 +15,7 @@ ksp = "2.0.10-1.0.24"
 androidDesugarJdkLibs = "2.0.4"
 
 kotlinxCoroutines = "1.8.1"
+kotlinxSerializationJson = "1.6.3"
 
 androidxCore = "1.13.1"
 androidxCoreSplashscreen = "1.0.1"
@@ -45,7 +46,7 @@ javaxInject = "1"
 timber = "5.0.1"
 okhttp = "4.12.0"
 retrofit = "2.11.0"
-gson = "2.10.1"
+retrofitKotlinxSerializationJson = "1.0.0"
 room = "2.6.1"
 turbine = "1.1.0"
 junit = "1.2.1"
@@ -58,6 +59,7 @@ haze = "0.7.2"
 # kotlin
 kotlin-stdlib = { group = "org.jetbrains.kotlin", name = "kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-coroutines-android = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
+kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 # Dependencies of the included build-logic
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "androidGradlePlugin" }
@@ -101,7 +103,6 @@ hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", v
 #hilt-ext-work = { group = "androidx.hilt", name = "hilt-work", version.ref = "hiltExt" }
 #hilt-ext-compiler = { group = "androidx.hilt", name = "hilt-compiler", version.ref = "hiltExt" }
 
-# navigation
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "androidxNavigation" }
 androidx-navigation-testing = { group = "androidx.navigation", name = "navigation-testing", version.ref = "androidxNavigation" }
 
@@ -112,7 +113,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 
 # square
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
-retrofit-converter-gson = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
+retrofit-converter-kotlin-serialization = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofitKotlinxSerializationJson" }
 okhttp-logging = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "okhttp" }
 
 # Test
@@ -122,8 +123,6 @@ androidx-test-ext = { group = "androidx.test.ext", name = "junit-ktx", version.r
 androidx-test-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "androidxEspresso" }
 
 # Etc
-gson = { group = "com.google.code.gson", name = "gson", version.ref = "gson" }
-#material = { group = "com.google.android.material", name = "material", version.ref = "googleMaterial" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 javax-inject = { group = "javax.inject", name = "javax.inject", version.ref = "javaxInject" }
 coil-kt = { group = "io.coil-kt", name = "coil", version.ref = "coil" }
@@ -135,6 +134,7 @@ haze = { group = "dev.chrisbanes.haze", name = "haze", version.ref = "haze" }
 
 [plugins]
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "androidGradlePlugin" }
 android-library = { id = "com.android.library", version.ref = "androidGradlePlugin" }

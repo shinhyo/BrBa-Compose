@@ -53,7 +53,6 @@ class ListViewModel @Inject constructor(
     private val deviceRepository: DeviceRepository,
 ) : ViewModel() {
 
-
     val uiState: StateFlow<ListUiState> = combine(
         getCharacterListUseCase(),
         deviceRepository.deviceData,

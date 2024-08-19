@@ -16,12 +16,14 @@
 package io.github.shinhyo.brba.core.network.model
 
 import androidx.annotation.Keep
-import com.google.gson.annotations.SerializedName
 import io.github.shinhyo.brba.core.model.BrbaCharacter
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 @Keep
+@Serializable
 data class CharacterResponse(
-    @SerializedName("char_id")
+    @SerialName("char_id")
     val charId: Long?,
     val name: String?,
     val birthday: String?,
@@ -33,7 +35,7 @@ data class CharacterResponse(
 )
 
 fun CharacterResponse.asExternalModel() = BrbaCharacter(
-    charId = charId ?: -1,
+    charId = charId ?: throw NullPointerException(),
     name = name ?: "",
     birthday = birthday ?: "",
     img = img ?: "",
