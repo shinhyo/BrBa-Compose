@@ -234,6 +234,8 @@ private fun Preview() {
                     character.copy(charId = 1, ratio = 1.8f),
                     character.copy(charId = 2, ratio = 1.6f, isFavorite = false),
                     character.copy(charId = 3, ratio = 1.4f, isFavorite = false),
+                    character.copy(charId = 4, ratio = 1.2f, isFavorite = false),
+                    character.copy(charId = 5, ratio = 1.8f, isFavorite = true),
                 ),
                 themeMode = BrbaThemeMode.System,
             ),

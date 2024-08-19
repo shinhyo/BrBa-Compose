@@ -26,6 +26,7 @@ import io.github.shinhyo.brba.core.domain.usecase.UpdateFavoriteUseCase
 import io.github.shinhyo.brba.core.model.BrbaCharacter
 import io.github.shinhyo.brba.core.model.BrbaThemeMode
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOf
@@ -48,11 +49,12 @@ sealed interface ListUiState {
 @HiltViewModel
 class ListViewModel @Inject constructor(
     getCharacterListUseCase: GetCharacterListUseCase,
-    val updateFavoriteUseCase: UpdateFavoriteUseCase,
+    private val updateFavoriteUseCase: UpdateFavoriteUseCase,
     private val deviceRepository: DeviceRepository,
 ) : ViewModel() {
 
-    val uiState = combine(
+
+    val uiState: StateFlow<ListUiState> = combine(
         getCharacterListUseCase(),
         deviceRepository.deviceData,
     ) { characters, deviceData ->
@@ -63,8 +65,8 @@ class ListViewModel @Inject constructor(
             when (result) {
                 is Result.Loading -> ListUiState.Loading
                 is Result.Success -> {
-                    val (character, themeMode) = result.data
-                    ListUiState.Success(character, themeMode)
+                    val (characters, themeMode) = result.data
+                    ListUiState.Success(characters, themeMode)
                 }
 
                 is Result.Error -> ListUiState.Error(result.exception)
