@@ -19,7 +19,6 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,6 +26,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -101,22 +101,77 @@ private fun SharedTransitionScope.DetailScreen(
                 )
             }
 
-            item {
-                when (val info: DetailInfoState = infoState) {
-                    is DetailInfoState.Loading -> {
+            when (val info: DetailInfoState = infoState) {
+                is DetailInfoState.Loading -> {
+                    item {
                         BrBaCircleProgress(modifier = Modifier)
                     }
+                }
 
-                    is DetailInfoState.Success -> {
-                        Description(
-                            character = info.character,
-                            onFavoriteClick = onFavoriteClick,
+                is DetailInfoState.Success -> {
+                    val character = info.character
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = character.name,
+                                style = MaterialTheme.typography.headlineLarge,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier
+                                    .weight(1.0f),
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            BrbaIconFavorite(
+                                enable = character.isFavorite,
+                                modifier = Modifier
+                                    .size(24.dp),
+                            ) {
+                                onFavoriteClick.invoke(character)
+                            }
+                        }
+                    }
+
+                    item {
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp),
+                            text = character.nickname,
+                            style = MaterialTheme.typography.headlineSmall,
                         )
                     }
 
-                    is DetailInfoState.Error -> {
-                        // TODO: Error Text
+                    if (character.category.isNotEmpty()) {
+                        item {
+                            Chips(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp),
+                                textList = character.category.map { "#$it" },
+                            )
+                        }
                     }
+
+                    item {
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp),
+                            text = character.description,
+                            style = MaterialTheme.typography.bodyMedium,
+                        )
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+                }
+
+                is DetailInfoState.Error -> {
+                    // TODO:
                 }
             }
         }
@@ -150,57 +205,6 @@ private fun SharedTransitionScope.CharacterImage(
 }
 
 @Composable
-private fun Description(
-    character: BrbaCharacter,
-    onFavoriteClick: (BrbaCharacter) -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(
-                text = character.name,
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .weight(1.0f),
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            BrbaIconFavorite(
-                enable = character.isFavorite,
-                modifier = Modifier
-                    .size(24.dp),
-            ) {
-                onFavoriteClick.invoke(character)
-            }
-        }
-
-        Spacer(modifier = Modifier.width(4.dp))
-
-        Text(
-            text = character.nickname,
-            style = MaterialTheme.typography.headlineSmall,
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-
-        val category = character.category
-        if (category.isEmpty()) return
-//        if (category.contains(",")) {
-//            Chips(textList = category.split(",").map { "#${it.trim()}" })
-//        } else {
-//            Chips(textList = listOf("#$category"))
-//        }
-        Chips(textList = category.map { "#$it" })
-    }
-}
-
-@Composable
 private fun Chips(
     modifier: Modifier = Modifier,
     textList: List<String>,
@@ -209,7 +213,7 @@ private fun Chips(
         modifier = modifier.fillMaxWidth(),
     ) {
         textList.forEachIndexed { index, text ->
-            if (index != 0) Spacer(modifier = modifier.width(4.dp))
+            if (index != 0) Spacer(modifier = Modifier.width(4.dp))
             AssistChip(
                 onClick = { },
                 label = {
@@ -243,9 +247,15 @@ private fun Preview() {
                     birthday = "09-07-1958",
                     img = "https://~~~.jpg",
                     status = "Presumed dead",
-                    nickname = "Heisenberg, Heisenberg, Heisenberg, Heisenberg, Heisenberg, Heisenberg",
+                    nickname = "Heisenberg, Heisenberg, Heisenberg",
                     portrayed = "",
-                    category = listOf("Breaking Bad1, Call Saul2, Breaking Bad3, Better Call Saul4, Breaking Bad5, Better Call Saul6"),
+                    category = listOf(
+                        "Breaking Bad1",
+                        "Breaking Bad3",
+                        "Breaking Bad5",
+                        "Better Call Saul6",
+                    ),
+                    description = "Walter Walter Walter Walter Walter Walter Walter Walter Walter Walter ",
                     ratio = 1.5f,
                     isFavorite = false,
                 ),

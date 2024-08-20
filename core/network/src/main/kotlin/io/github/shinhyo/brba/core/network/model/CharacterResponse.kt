@@ -32,6 +32,7 @@ data class CharacterResponse(
     val nickname: String?,
     val portrayed: String?,
     val category: String?,
+    val description: String?,
 )
 
 fun CharacterResponse.asExternalModel(): BrbaCharacter = BrbaCharacter(
@@ -43,4 +44,5 @@ fun CharacterResponse.asExternalModel(): BrbaCharacter = BrbaCharacter(
     nickname = nickname ?: "",
     portrayed = portrayed ?: "",
     category = category?.split(",").orEmpty().map { it.trim() },
+    description = description ?: "",
 )

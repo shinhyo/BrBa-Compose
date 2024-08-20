@@ -26,6 +26,7 @@ data class BrbaCharacter(
     val nickname: String = "",
     val portrayed: String = "",
     val category: List<String> = listOf(),
+    val description: String = "",
     val ratio: Float = 1f,
     val isFavorite: Boolean = false,
     val ctime: Date = Date(),

@@ -56,6 +56,9 @@ class RetrofitNetwork @Inject constructor(
 ) : NetworkDataSource {
 
     private val baBrApi by lazy {
+        val json = Json {
+            ignoreUnknownKeys = true
+        }
         Retrofit.Builder()
             .baseUrl(BaBrApi.BASE_URL)
             .client(
@@ -71,7 +74,7 @@ class RetrofitNetwork @Inject constructor(
                     .addInterceptor { forceCache(it) }
                     .build(),
             )
-            .addConverterFactory(Json.asConverterFactory("application/json".toMediaType()))
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
             .build()
             .create(BaBrApi::class.java)
     }

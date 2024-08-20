@@ -63,7 +63,6 @@ class DetailViewModel @Inject constructor(
             when (it) {
                 is Result.Loading -> DetailInfoState.Loading
                 is Result.Success -> {
-                    val character: BrbaCharacter = it.data
                     DetailInfoState.Success(character = it.data)
                 }
 
