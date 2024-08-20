@@ -20,16 +20,16 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import io.github.shinhyo.brba.feature.bottombar.BottomBarScreen
+import kotlinx.serialization.Serializable
 
-const val ROUTE_MAIN = "route_main"
+@Serializable
+object BottomBar
 
 context(SharedTransitionScope)
-fun NavGraphBuilder.bottomBardComposable(
+fun NavGraphBuilder.bottomBarComposable(
     navController: NavHostController,
 ) {
-    composable(
-        route = ROUTE_MAIN,
-    ) {
+    composable<BottomBar> {
         BottomBarScreen(
             navController = navController,
             animatedVisibilityScope = this,

@@ -20,8 +20,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
-import io.github.shinhyo.brba.feature.bottombar.navigation.ROUTE_MAIN
-import io.github.shinhyo.brba.feature.bottombar.navigation.bottomBardComposable
+import io.github.shinhyo.brba.feature.bottombar.navigation.BottomBar
+import io.github.shinhyo.brba.feature.bottombar.navigation.bottomBarComposable
 import io.github.shinhyo.brba.feature.detail.navigaion.detailComposable
 
 @Composable
@@ -31,10 +31,10 @@ fun BrbaApp(
     SharedTransitionLayout {
         NavHost(
             navController = appState.navController,
-            startDestination = ROUTE_MAIN,
+            startDestination = BottomBar,
             modifier = Modifier.fillMaxSize(),
         ) {
-            bottomBardComposable(
+            bottomBarComposable(
                 navController = appState.navController,
             )
             detailComposable()

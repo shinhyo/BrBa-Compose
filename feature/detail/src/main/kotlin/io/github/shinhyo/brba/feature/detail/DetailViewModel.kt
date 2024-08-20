@@ -24,7 +24,7 @@ import io.github.shinhyo.brba.core.common.result.asResult
 import io.github.shinhyo.brba.core.domain.usecase.GetCharacterUseCase
 import io.github.shinhyo.brba.core.domain.usecase.UpdateFavoriteUseCase
 import io.github.shinhyo.brba.core.model.BrbaCharacter
-import io.github.shinhyo.brba.feature.detail.navigaion.DetailArgs
+import io.github.shinhyo.brba.feature.detail.navigaion.Detail
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asStateFlow
@@ -47,7 +47,12 @@ class DetailViewModel @Inject constructor(
     private val updateFavoriteUseCase: UpdateFavoriteUseCase,
 ) : ViewModel() {
 
-    private val args: DetailArgs by lazy { DetailArgs(savedStateHandle = savedStateHandle) }
+    private val args: Detail by lazy {
+        Detail(
+            id = checkNotNull(savedStateHandle.get<Long>("id")),
+            image = checkNotNull(savedStateHandle.get<String>("image")),
+        )
+    }
 
     private val _imageState = MutableStateFlow(args.id to args.image)
     val imageState = _imageState.asStateFlow()

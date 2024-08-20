@@ -1,8 +1,8 @@
 [versions]
 versionCode = "1"
 versionName = "1.0.0"
-compileSdkVer = "34"
-targetSdkVer = "34"
+compileSdkVer = "35"
+targetSdkVer = "35"
 minSdkVer = "28"
 
 androidGradlePlugin = "8.5.2"
@@ -34,7 +34,7 @@ androidxComposeMaterial3 = "1.1.2"
 hilt = "2.51.1"
 hiltExt = "1.0.0"
 
-androidxNavigation = "2.7.7"
+androidxNavigation = "2.8.0-beta07"
 
 junit4 = "4.13.2"
 androidxTestCore = "1.6.1"

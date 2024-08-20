@@ -3,6 +3,7 @@ import io.github.shinhyo.brba.buildlogic.findLibrary
 
 with(pluginManager) {
     apply("brba.android.library.compose")
+    apply("org.jetbrains.kotlin.plugin.serialization")
 }
 
 androidExtension.apply {
@@ -12,6 +13,8 @@ androidExtension.apply {
         add("implementation", project(":core:designsystem"))
         add("implementation", project(":core:common"))
         add("implementation", project(":core:domain"))
+
+        add("implementation", findLibrary("kotlinx.serialization.json"))
 
         add("implementation", findLibrary("coil.kt.compose"))
 
