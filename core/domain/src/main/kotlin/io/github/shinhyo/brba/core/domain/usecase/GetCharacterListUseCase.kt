@@ -23,6 +23,7 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.flow.map
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.random.Random
@@ -33,23 +34,22 @@ class GetCharacterListUseCase @Inject constructor(
 ) {
     companion object {
         private const val MIN_RATIO = 1.4f
-        private const val RATIO_INCREMENT = 0.12f
-        private const val MAX_RANDOM_INT = 4
     }
 
     private val random: Random by lazy { Random(Calendar.getInstance().timeInMillis) }
 
-    operator fun invoke(): Flow<List<BrbaCharacter>> =
-        combine(
-            repo.getCharacterList(),
+    operator fun invoke(): Flow<List<BrbaCharacter>> = repo.getCharacterList()
+        .map {
+            it.map { i -> i.copy(ratio = MIN_RATIO + random.nextInt(4) * 0.12f) }
+        }
+        .combine(
             repo.getDatabaseList(),
         ) { listApi, listDb ->
-            listApi.map { apiCharacter ->
-                val ratio = MIN_RATIO + random.nextInt(MAX_RANDOM_INT) * RATIO_INCREMENT
-                apiCharacter.copy(
-                    ratio = ratio,
-                    isFavorite = listDb.any { it.charId == apiCharacter.charId && it.isFavorite },
+            listApi.map { item ->
+                item.copy(
+                    isFavorite = listDb.find { it.charId == item.charId }?.isFavorite ?: false,
                 )
             }
-        }.flowOn(ioDispatcher)
+        }
+        .flowOn(ioDispatcher)
 }
