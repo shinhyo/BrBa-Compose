@@ -19,7 +19,6 @@ import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -32,9 +31,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -56,6 +52,7 @@ import coil.request.ImageRequest
 import io.github.shinhyo.brba.core.model.BrbaCharacter
 import io.github.shinhyo.brba.core.theme.BrbaPreviewTheme
 import io.github.shinhyo.brba.core.ui.BrBaCircleProgress
+import io.github.shinhyo.brba.core.ui.BrbaChips
 import io.github.shinhyo.brba.core.ui.BrbaIconFavorite
 import io.github.shinhyo.brba.core.utils.brbaSharedElement
 
@@ -148,10 +145,10 @@ private fun SharedTransitionScope.DetailScreen(
 
                     if (character.category.isNotEmpty()) {
                         item {
-                            Chips(
+                            BrbaChips(
                                 modifier = Modifier
                                     .padding(horizontal = 16.dp),
-                                textList = character.category.map { "#$it" },
+                                chipList = character.category.map { "#$it" },
                             )
                         }
                     }
@@ -202,35 +199,6 @@ private fun SharedTransitionScope.CharacterImage(
                 rememberSharedContentState(key = "character_${id}_card"),
             ),
     )
-}
-
-@Composable
-private fun Chips(
-    modifier: Modifier = Modifier,
-    textList: List<String>,
-) {
-    FlowRow(
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        textList.forEachIndexed { index, text ->
-            if (index != 0) Spacer(modifier = Modifier.width(4.dp))
-            AssistChip(
-                onClick = { },
-                label = {
-                    Text(
-                        text = text,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.tertiary,
-                    )
-                },
-                shape = RoundedCornerShape(16.dp),
-                colors = AssistChipDefaults.assistChipColors(
-                    containerColor = MaterialTheme.colorScheme.onTertiary,
-                ),
-                modifier = Modifier.padding(0.dp),
-            )
-        }
-    }
 }
 
 @Preview

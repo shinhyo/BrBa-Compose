@@ -103,9 +103,9 @@ private fun SharedTransitionScope.FavoriteScreen(
                     items(
                         items = uiState.list,
                         key = { item -> item.charId },
-                    ) { item ->
+                    ) { character ->
                         BrbaCharacterRow(
-                            character = item,
+                            character = character,
                             animatedVisibilityScope = animatedVisibilityScope,
                             onCharacterClick = onCharacterClick,
                             onFavoriteClick = onFavoriteClick,
