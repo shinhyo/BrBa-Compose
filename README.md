@@ -2,7 +2,7 @@
 
 <p align="center">
   <a href='https://developer.android.com'><img src='http://img.shields.io/badge/platform-android-green.svg'/></a>
-  <a href="https://kotlinlang.org/docs/whatsnew1920.html"><img src = "https://shields.io/badge/kotlin-2.0.10-blue" /></a>
+  <a href="https://kotlinlang.org/docs/whatsnew1920.html"><img src = "https://shields.io/badge/kotlin-2.0.20-RC2-blue" /></a>
   <a href="https://developer.android.com/jetpack/compose/bom"><img src = "https://img.shields.io/badge/jetpack%20compose-2024.06.00-brightgreen" /></a>
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg"/></a>
 </p>
@@ -27,6 +27,7 @@
 - Clean Architecture (nowinandroid)
 - MVVM pattern
 - Kotlin Coroutines & Flows & Serialization
+- Type Safety Navigation(2.8.0-beta07)
 - Material Design 3
   - [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/)
 - Single Activity
