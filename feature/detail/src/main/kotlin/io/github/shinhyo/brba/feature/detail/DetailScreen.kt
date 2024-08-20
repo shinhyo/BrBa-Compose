@@ -18,6 +18,7 @@ package io.github.shinhyo.brba.feature.detail
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
@@ -31,7 +32,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.AssistChip
 import androidx.compose.material3.AssistChipDefaults
@@ -58,6 +58,7 @@ import io.github.shinhyo.brba.core.theme.BrbaPreviewTheme
 import io.github.shinhyo.brba.core.ui.BrBaCircleProgress
 import io.github.shinhyo.brba.core.ui.BrbaIconFavorite
 import io.github.shinhyo.brba.core.utils.brbaSharedElement
+import java.util.Date
 
 @Composable
 fun SharedTransitionScope.DetailRoute(
@@ -65,11 +66,13 @@ fun SharedTransitionScope.DetailRoute(
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: DetailViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val imageState by viewModel.imageState.collectAsStateWithLifecycle()
+    val infoState by viewModel.infoState.collectAsStateWithLifecycle()
 
     DetailScreen(
         modifier = modifier.statusBarsPadding(),
-        uiState = uiState,
+        infoState = infoState,
+        imageState = imageState,
         animatedVisibilityScope = animatedVisibilityScope,
         onFavoriteClick = viewModel::updateFavorite,
     )
@@ -78,7 +81,8 @@ fun SharedTransitionScope.DetailRoute(
 @Composable
 private fun SharedTransitionScope.DetailScreen(
     modifier: Modifier = Modifier,
-    uiState: DetailUiState,
+    infoState: DetailInfoState,
+    imageState: Pair<Long, String>,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onFavoriteClick: (BrbaCharacter) -> Unit,
 ) {
@@ -89,55 +93,61 @@ private fun SharedTransitionScope.DetailScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(padding),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(uiState.items) { detailListType ->
-                when (val type: DetailListType = detailListType) {
-                    is DetailListType.Loading -> {
-                        BrBaCircleProgress()
+
+            item {
+                CharacterImage(
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    imageState = imageState,
+                )
+            }
+
+            item {
+                when (val info: DetailInfoState = infoState) {
+                    is DetailInfoState.Loading -> {
+                        BrBaCircleProgress(modifier = Modifier)
                     }
 
-                    is DetailListType.Image -> {
-                        CharacterImage(
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            type = type,
-                        )
-                    }
-
-                    is DetailListType.Description -> {
+                    is DetailInfoState.Success -> {
                         Description(
-                            character = type.character,
+                            character = info.character,
                             onFavoriteClick = onFavoriteClick,
                         )
                     }
 
-                    is DetailListType.Error -> {
+                    is DetailInfoState.Error -> {
+                        // TODO: Error Text
                     }
                 }
             }
+
         }
     }
 }
 
 @Composable
 private fun SharedTransitionScope.CharacterImage(
+    modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    type: DetailListType.Image,
+    imageState: Pair<Long, String>,
 ) {
+    val (id, image) = imageState
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(type.image)
+            .data(image)
             .build(),
         contentScale = ContentScale.Crop,
         contentDescription = null,
         alignment = Alignment.TopCenter,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f / 1.4f)
             .brbaSharedElement(
                 isLocalInspectionMode = LocalInspectionMode.current,
                 animatedVisibilityScope = animatedVisibilityScope,
-                rememberSharedContentState(key = "character_${type.id}_row"),
-                rememberSharedContentState(key = "character_${type.id}_card"),
+                rememberSharedContentState(key = "character_${id}_row"),
+                rememberSharedContentState(key = "character_${id}_card"),
             ),
     )
 }
@@ -184,18 +194,19 @@ private fun Description(
 
         val category = character.category
         if (category.isEmpty()) return
-        if (category.contains(",")) {
-            Chips(category.split(",").map { "#${it.trim()}" })
-        } else {
-            Chips(listOf("#$category"))
-        }
+//        if (category.contains(",")) {
+//            Chips(textList = category.split(",").map { "#${it.trim()}" })
+//        } else {
+//            Chips(textList = listOf("#$category"))
+//        }
+        Chips(textList = category.map { "#$it" })
     }
 }
 
 @Composable
 private fun Chips(
-    textList: List<String>,
     modifier: Modifier = Modifier,
+    textList: List<String>,
 ) {
     FlowRow(
         modifier = modifier.fillMaxWidth(),
@@ -228,29 +239,34 @@ private fun Preview() {
     BrbaPreviewTheme {
         DetailScreen(
             animatedVisibilityScope = it,
-            uiState = DetailUiState.Success(
-                listOf(
-                    DetailListType.Image(
-                        id = 8569,
-                        image = "https://~~~.jpg",
-                    ),
-                    DetailListType.Description(
-                        character = BrbaCharacter(
-                            charId = 0,
-                            name = "Walter White Walter White Walter White Walter White Walter White",
-                            birthday = "09-07-1958",
-                            img = "https://~~~.jpg",
-                            status = "Presumed dead",
-                            nickname = "Heisenberg, Heisenberg, Heisenberg, Heisenberg, Heisenberg, Heisenberg",
-                            portrayed = "",
-                            category = "Breaking Bad1, Call Saul2, Breaking Bad3, Better Call Saul4, Breaking Bad5, Better Call Saul6",
-                            ratio = 1.5f,
-                            isFavorite = false,
-                            ctime = null,
-                        ),
-                    ),
+            infoState = DetailInfoState.Success(
+                character = BrbaCharacter(
+                    charId = 0,
+                    name = "Walter White Walter White Walter White Walter White Walter White",
+                    birthday = "09-07-1958",
+                    img = "https://~~~.jpg",
+                    status = "Presumed dead",
+                    nickname = "Heisenberg, Heisenberg, Heisenberg, Heisenberg, Heisenberg, Heisenberg",
+                    portrayed = "",
+                    category = listOf("Breaking Bad1, Call Saul2, Breaking Bad3, Better Call Saul4, Breaking Bad5, Better Call Saul6"),
+                    ratio = 1.5f,
+                    isFavorite = false,
                 ),
             ),
+            imageState = 0L to "",
+            onFavoriteClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewLoading() {
+    BrbaPreviewTheme {
+        DetailScreen(
+            animatedVisibilityScope = it,
+            infoState = DetailInfoState.Loading,
+            imageState = 0L to "",
             onFavoriteClick = {},
         )
     }
