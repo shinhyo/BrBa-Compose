@@ -33,6 +33,7 @@ import dev.chrisbanes.haze.HazeDefaults
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
 import io.github.shinhyo.brba.core.designsystem.R
+import io.github.shinhyo.brba.core.theme.BrbaPreviewTheme
 
 @Composable
 fun BrbaTopAppBar(
@@ -46,7 +47,7 @@ fun BrbaTopAppBar(
             Text(
                 text = title ?: LocalContext.current.getString(R.string.top_bar_title),
                 color = MaterialTheme.colorScheme.primary,
-                style = MaterialTheme.typography.displaySmall,
+                style = MaterialTheme.typography.headlineMedium,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier,
             )
@@ -69,8 +70,10 @@ fun BrbaTopAppBar(
 @Preview(showBackground = true)
 @Composable
 private fun Preview() {
-    BrbaTopAppBar(
-        title = "Title",
-        hazeState = HazeState(),
-    )
+    BrbaPreviewTheme {
+        BrbaTopAppBar(
+            title = "Title",
+            hazeState = HazeState(),
+        )
+    }
 }

@@ -222,10 +222,9 @@ private fun Preview() {
             status = "Presumed dead",
             nickname = "Heisenberg",
             portrayed = "",
-            category = "Breaking Bad",
+            category = listOf("Breaking Bad"),
             ratio = 1.2f,
             isFavorite = true,
-            ctime = null,
         )
         ListScreen(
             uiState = ListUiState.Success(

@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -78,10 +77,9 @@ fun SharedTransitionScope.BrbaCharacterRow(
                     ),
             )
 
-            Spacer(modifier = Modifier.width(4.dp))
-
             Column(
                 modifier = Modifier
+                    .padding(horizontal = 8.dp, vertical = 8.dp)
                     .weight(1f),
             ) {
                 Text(
@@ -92,9 +90,7 @@ fun SharedTransitionScope.BrbaCharacterRow(
                     modifier = Modifier
                         .fillMaxWidth(),
                 )
-
                 Spacer(modifier = Modifier.height(2.dp))
-
                 Text(
                     text = character.nickname,
                     style = MaterialTheme.typography.bodyLarge,
@@ -108,7 +104,6 @@ fun SharedTransitionScope.BrbaCharacterRow(
                 Box(
                     contentAlignment = Alignment.BottomEnd,
                     modifier = Modifier
-                        .padding(horizontal = 4.dp, vertical = 4.dp)
                         .fillMaxSize(),
                 ) {
                     BrbaIconFavorite(
@@ -135,10 +130,9 @@ private fun Preview() {
                 status = "Presumed dead",
                 nickname = "Heisenberg, Heisenberg, Heisenberg, Heisenberg",
                 portrayed = "",
-                category = "Breaking Bad",
+                category = listOf("Breaking Bad"),
                 ratio = 1.5f,
                 isFavorite = true,
-                ctime = null,
             ),
             animatedVisibilityScope = it,
         )

@@ -34,7 +34,7 @@ data class CharacterResponse(
     val category: String?,
 )
 
-fun CharacterResponse.asExternalModel() = BrbaCharacter(
+fun CharacterResponse.asExternalModel(): BrbaCharacter = BrbaCharacter(
     charId = charId ?: throw NullPointerException(),
     name = name ?: "",
     birthday = birthday ?: "",
@@ -42,5 +42,5 @@ fun CharacterResponse.asExternalModel() = BrbaCharacter(
     status = status ?: "",
     nickname = nickname ?: "",
     portrayed = portrayed ?: "",
-    category = category ?: "",
+    category = category?.split(",").orEmpty().map { it.trim() },
 )

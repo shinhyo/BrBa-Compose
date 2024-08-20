@@ -58,7 +58,6 @@ import io.github.shinhyo.brba.core.theme.BrbaPreviewTheme
 import io.github.shinhyo.brba.core.ui.BrBaCircleProgress
 import io.github.shinhyo.brba.core.ui.BrbaIconFavorite
 import io.github.shinhyo.brba.core.utils.brbaSharedElement
-import java.util.Date
 
 @Composable
 fun SharedTransitionScope.DetailRoute(
@@ -95,7 +94,6 @@ private fun SharedTransitionScope.DetailScreen(
                 .padding(padding),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-
             item {
                 CharacterImage(
                     animatedVisibilityScope = animatedVisibilityScope,
@@ -121,7 +119,6 @@ private fun SharedTransitionScope.DetailScreen(
                     }
                 }
             }
-
         }
     }
 }
