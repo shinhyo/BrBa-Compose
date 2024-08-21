@@ -27,6 +27,8 @@ androidExtension.apply {
         add("implementation", findLibrary("androidx.hilt.navigation.compose"))
         add("implementation", findLibrary("androidx.lifecycle.runtimeCompose"))
         add("implementation", findLibrary("androidx.lifecycle.viewModelCompose"))
+
+        add("testImplementation", project(":core:testing"))
     }
 
 }

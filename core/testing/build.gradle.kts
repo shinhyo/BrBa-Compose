@@ -12,8 +12,9 @@ dependencies {
     api(project(":core:domain"))
     api(project(":core:model"))
     api(libs.kotlinx.coroutines.test)
-
-//    testApi(libs.junit)
+    api(libs.turbine)
+    api(libs.mockk)
+    api(libs.junit)
 //    androidTestApi(libs.androidx.test.ext.junit)
 //    androidTestApi(libs.androidx.test.espresso.core)
 }
