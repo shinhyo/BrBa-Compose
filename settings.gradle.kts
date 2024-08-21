@@ -25,6 +25,7 @@ include(
     ":core:model",
     ":core:domain",
     ":core:designsystem",
+    ":core:testing",
 
     ":feature:main",
     ":feature:bottombar",
