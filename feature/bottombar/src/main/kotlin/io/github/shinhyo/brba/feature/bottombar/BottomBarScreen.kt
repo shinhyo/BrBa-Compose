@@ -37,11 +37,11 @@ import io.github.shinhyo.brba.core.ui.BrbaNavigationBarItem
 import io.github.shinhyo.brba.feature.detail.navigaion.navigateToDetail
 import io.github.shinhyo.brba.feature.favorate.navigation.favoriteComposable
 import io.github.shinhyo.brba.feature.favorate.navigation.navigateFavorite
-import io.github.shinhyo.brba.feature.main.navigation.LIST_ROUTE
-import io.github.shinhyo.brba.feature.main.navigation.listComposable
-import io.github.shinhyo.brba.feature.main.navigation.navigateList
-import io.github.shinhyo.brba.feature.main.navigation.navigateSetting
-import io.github.shinhyo.brba.feature.main.navigation.settingComposable
+import io.github.shinhyo.brba.feature.list.navigation.LIST_ROUTE
+import io.github.shinhyo.brba.feature.list.navigation.listComposable
+import io.github.shinhyo.brba.feature.list.navigation.navigateList
+import io.github.shinhyo.brba.feature.setting.navigation.navigateSetting
+import io.github.shinhyo.brba.feature.setting.navigation.settingComposable
 
 @Composable
 fun SharedTransitionScope.BottomBarScreen(

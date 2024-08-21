@@ -13,22 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.shinhyo.brba.feature.main.navigation
+package io.github.shinhyo.brba.feature.setting.navigation
 
-import androidx.compose.animation.AnimatedVisibilityScope
-import androidx.compose.animation.SharedTransitionScope
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.navOptions
-import io.github.shinhyo.brba.core.model.BrbaCharacter
-import io.github.shinhyo.brba.feature.main.ListRoute
+import io.github.shinhyo.brba.feature.setting.SettingRoute
 
-const val LIST_ROUTE = "list_route"
+const val SETTING_ROUTE = "setting_route"
 
-fun NavController.navigateList() {
+fun NavController.navigateSetting() {
     navigate(
-        route = LIST_ROUTE,
+        route = SETTING_ROUTE,
         navOptions = navOptions {
             popUpTo(graph.startDestinationId) {
                 saveState = true
@@ -39,17 +36,10 @@ fun NavController.navigateList() {
     )
 }
 
-context(SharedTransitionScope)
-fun NavGraphBuilder.listComposable(
-    navigateToDetail: (BrbaCharacter) -> Unit,
-    animatedVisibilityScope: AnimatedVisibilityScope,
-) {
+fun NavGraphBuilder.settingComposable() {
     composable(
-        route = LIST_ROUTE,
+        route = SETTING_ROUTE,
     ) {
-        ListRoute(
-            navigateToDetail = navigateToDetail,
-            animatedVisibilityScope = animatedVisibilityScope,
-        )
+        SettingRoute()
     }
 }

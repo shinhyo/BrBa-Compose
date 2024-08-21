@@ -16,8 +16,8 @@
 package io.github.shinhyo.brba.feature.bottombar
 
 import io.github.shinhyo.brba.feature.favorate.navigation.FAVORITE_ROUTE
-import io.github.shinhyo.brba.feature.main.navigation.LIST_ROUTE
-import io.github.shinhyo.brba.feature.main.navigation.SETTING_ROUTE
+import io.github.shinhyo.brba.feature.list.navigation.LIST_ROUTE
+import io.github.shinhyo.brba.feature.setting.navigation.SETTING_ROUTE
 
 enum class Tab(
     val label: String,

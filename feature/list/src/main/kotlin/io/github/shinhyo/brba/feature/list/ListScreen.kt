@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.github.shinhyo.brba.feature.main
+package io.github.shinhyo.brba.feature.list
 
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibilityScope
