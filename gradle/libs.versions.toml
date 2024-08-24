@@ -9,9 +9,9 @@ androidGradlePlugin = "8.5.2"
 androidTools = "31.5.2"
 
 # https://github.com/JetBrains/kotlin/releases
-kotlin = "2.0.20-RC2"
+kotlin = "2.0.20"
 # https://github.com/google/ksp/releases
-ksp = "2.0.20-RC2-1.0.24"
+ksp = "2.0.20-1.0.24"
 androidDesugarJdkLibs = "2.0.4"
 
 kotlinxCoroutines = "1.8.1"
@@ -27,14 +27,14 @@ androidxConstraintlayoutCompose = "1.0.1"
 androidxLifecycle = "2.8.4"
 androidxDataStore = "1.1.1"
 
-androidxComposeBom = "2024.06.00"
-androidxCompose = "1.7.0-beta07"
+androidxComposeBom = "2024.08.00"
+androidxCompose = "1.7.0-rc01"
 androidxComposeMaterial3 = "1.1.2"
 
 hilt = "2.51.1"
 hiltExt = "1.0.0"
 
-androidxNavigation = "2.8.0-beta07"
+androidxNavigation = "2.8.0-rc01"
 
 junit4 = "4.13.2"
 androidxTestCore = "1.6.1"
