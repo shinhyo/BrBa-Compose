@@ -17,11 +17,11 @@ package io.github.shinhyo.brba.feature.list
 
 import app.cash.turbine.test
 import io.github.shinhyo.brba.core.model.BrbaCharacter
-import io.github.shinhyo.brba.core.model.BrbaDeviceData
 import io.github.shinhyo.brba.core.model.BrbaThemeMode
 import io.github.shinhyo.brba.core.testing.BaseViewModelTest
 import io.mockk.coEvery
 import io.mockk.coVerify
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -37,136 +37,93 @@ class ListViewModelTest : BaseViewModelTest<ListViewModel>() {
         deviceRepository = deviceRepository,
     )
 
-    override fun onBefore() {
-        coEvery {
-            charactersRepository.getCharacterList()
-        } returns flowOf(
-            listOf(
-                BrbaCharacter(
-                    charId = 7166,
-                    name = "Michael Owen",
-                    birthday = "semper",
-                    img = "vel",
-                    status = "elementum",
-                    nickname = "Arthur Gates",
-                    portrayed = "natoque",
-                    category = listOf(),
-                    description = "adipiscing",
-                ),
-                BrbaCharacter(
-                    charId = 3906,
-                    name = "Christine Yang",
-                    birthday = "finibus",
-                    img = "nunc",
-                    status = "maiestatis",
-                    nickname = "Carey Prince",
-                    portrayed = "atqui",
-                    category = listOf(),
-                    description = "dicta",
-                ),
-            ),
-        )
+    @Test
+    fun `Given ListViewModel is created, When it initializes, Then it should fetch character list and device data`() = runTest {
+        // Given
+        val expectedCharactersSize = 2
+        val expectedThemeMode = BrbaThemeMode.Light
 
-        coEvery {
-            charactersRepository.getDatabaseList()
-        } returns flowOf(
-            listOf(
-                BrbaCharacter(
-                    charId = 3906,
-                    name = "Christine Yang",
-                    birthday = "finibus",
-                    img = "nunc",
-                    nickname = "Carey Prince",
-                    isFavorite = true,
-                ),
-            ),
-        )
-
-        coEvery {
-            deviceRepository.deviceData
-        } returns flowOf(
-            BrbaDeviceData(
-                themeMode = BrbaThemeMode.Light,
-            ),
-        )
-
-        coEvery {
-            deviceRepository.setThemeMode(any())
-        } returns Unit
-
-        super.onBefore()
+        // Then
+        viewModel.uiState.test {
+            val uiState = awaitItem()
+            assertTrue(uiState is ListUiState.Success)
+            assertEquals(expectedCharactersSize, (uiState as ListUiState.Success).characters.size)
+            assertEquals(expectedThemeMode, uiState.themeMode)
+        }
     }
 
     @Test
-    fun `when the ListViewModel is created, it should fetch character list and device data`() =
-        runTest {
-            val expectedCharactersSize = 2;
-            val expectedThemeMode = BrbaThemeMode.Light
+    fun `Given character list fetch throws RuntimeException, When ViewModel is created, Then uiState should be Error`() = runTest {
+        // Given
+        coEvery {
+            charactersRepository.getCharacterList()
+        } returns flow { throw RuntimeException() }
 
-            viewModel.uiState.test {
-                val uiState = awaitItem()
-                assertTrue(uiState is ListUiState.Success)
-                assertEquals(
-                    expectedCharactersSize,
-                    (uiState as ListUiState.Success).characters.size,
-                )
-                assertEquals(expectedThemeMode, uiState.themeMode)
-            }
+        // When
+        val viewModel = makeViewModel()
+
+        // Then
+        viewModel.uiState.test {
+            val uiState = awaitItem()
+            assertTrue(uiState is ListUiState.Error)
         }
+    }
 
     @Test
-    fun `when the user clicks on a character to toggle favorite, the updateFavoriteUseCase should be called`() =
-        runTest {
+    fun `Given a character, When the user clicks to toggle favorite, Then updateFavoriteUseCase should be called`() = runTest {
+        // Given
+        coEvery {
+            charactersRepository.updateFavorite(any())
+        } returns flowOf(true)
 
-            coEvery {
-                charactersRepository.updateFavorite(any())
-            } returns flowOf(true)
+        val character = BrbaCharacter(
+            charId = 3906,
+            name = "Christine Yang",
+            birthday = "finibus",
+            img = "nunc",
+            nickname = "Carey Prince",
+            isFavorite = false,
+        )
 
+        // When
+        viewModel.onFavoriteClick(character)
 
-            val character = BrbaCharacter(
-                charId = 3906,
-                name = "Christine Yang",
-                birthday = "finibus",
-                img = "nunc",
-                nickname = "Carey Prince",
-                isFavorite = false,
-            )
-
-            viewModel.onFavoriteClick(character)
-
-            coVerify { updateFavoriteUseCase(character) }
-        }
+        // Then
+        coVerify { updateFavoriteUseCase(character) }
+    }
 
     @Test
-    fun `when the user clicks to change the theme, the theme mode should be updated in the device repository`() =
-        runTest {
-            val currentThemeMode = BrbaThemeMode.Light
+    fun `Given light theme, When the user clicks to change the theme, Then the theme mode should be updated to dark`() = runTest {
+        // Given
+        val currentThemeMode = BrbaThemeMode.Light
 
+        // When
+        viewModel.onChangeThemeClick(currentThemeMode)
+
+        // Then
+        coVerify { deviceRepository.setThemeMode(BrbaThemeMode.Dark) }
+    }
+
+    @Test
+    fun `Given dark theme, When the user clicks to change the theme, Then the theme mode should be updated to light`() = runTest {
+        // Given
+        val currentThemeMode = BrbaThemeMode.Dark
+
+        // When
+        viewModel.onChangeThemeClick(currentThemeMode)
+
+        // Then
+        coVerify { deviceRepository.setThemeMode(BrbaThemeMode.Light) }
+    }
+
+    @Test
+    fun `Given system theme, When the user clicks to change the theme, Then an IllegalArgumentException should be thrown`() = runTest {
+        // Given
+        val currentThemeMode = BrbaThemeMode.System
+
+        // When & Then
+        assertThrows(IllegalArgumentException::class.java) {
             viewModel.onChangeThemeClick(currentThemeMode)
-
-            coVerify { deviceRepository.setThemeMode(BrbaThemeMode.Dark) }
         }
-
-    @Test
-    fun `when the user clicks to change the theme from dark to light, the theme mode should be updated in the device repository`() =
-        runTest {
-            val currentThemeMode = BrbaThemeMode.Dark
-
-            viewModel.onChangeThemeClick(currentThemeMode)
-
-            coVerify { deviceRepository.setThemeMode(BrbaThemeMode.Light) }
-        }
-
-    @Test
-    fun `when the user clicks to change the theme from system, an IllegalArgumentException should be thrown`() =
-        runTest {
-            val currentThemeMode = BrbaThemeMode.System
-
-            assertThrows(
-                IllegalArgumentException::class.java,
-            ) {
-                viewModel.onChangeThemeClick(currentThemeMode)
-            }
-        }
-
+    }
 }

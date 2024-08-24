@@ -30,10 +30,13 @@ abstract class ViewModelTest<T : ViewModel> {
 
     protected lateinit var viewModel: T
 
+    abstract fun setDefaultMockData()
+
     abstract fun makeViewModel(): T
 
     @Before
     open fun onBefore() {
+        setDefaultMockData()
         viewModel = makeViewModel()
     }
 

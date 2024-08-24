@@ -9,3 +9,4 @@ build/
 app/build
 build
 /.kotlin
+/htmlReport/*
