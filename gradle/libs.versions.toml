@@ -12,7 +12,7 @@ androidTools = "31.5.2"
 kotlin = "2.0.20"
 # https://github.com/google/ksp/releases
 ksp = "2.0.20-1.0.24"
-androidDesugarJdkLibs = "2.0.4"
+androidDesugarJdkLibs = "2.1.0"
 
 kotlinxCoroutines = "1.8.1"
 kotlinxSerializationJson = "1.7.1"
@@ -23,7 +23,6 @@ androidxAppCompat = "1.7.0"
 androidxActivity = "1.9.1"
 androidxStartup = "1.1.1"
 androidxHiltNavigationCompose = "1.2.0"
-androidxConstraintlayoutCompose = "1.0.1"
 androidxLifecycle = "2.8.4"
 androidxDataStore = "1.1.1"
 
@@ -78,7 +77,6 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "androidxAppCompat" }
 androidx-startup = { group = "androidx.startup", name = "startup-runtime", version.ref = "androidxStartup" }
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "androidxHiltNavigationCompose" }
-#androidx-constraintlayout-compose = { group = "androidx.constraintlayout", name = "constraintlayout-compose", version.ref = "androidxConstraintlayoutCompose" }
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "androidxActivity" }
 androidx-lifecycle-runtimeCompose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
