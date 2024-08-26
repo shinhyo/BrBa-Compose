@@ -58,7 +58,7 @@ fun SharedTransitionScope.FavoriteRoute(
         uiState = uiState,
         animatedVisibilityScope = animatedVisibilityScope,
         onCharacterClick = onCharacterClick,
-        onFavoriteClick = viewModel::updateFavorite,
+        onFavoriteClick = viewModel::onFavoriteClick,
     )
 }
 

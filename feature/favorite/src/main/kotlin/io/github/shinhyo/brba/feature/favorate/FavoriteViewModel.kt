@@ -68,7 +68,7 @@ class FavoriteViewModel @Inject constructor(
             initialValue = FavoriteUiState.Loading,
         )
 
-    fun updateFavorite(character: BrbaCharacter) {
+    fun onFavoriteClick(character: BrbaCharacter) {
         updateFavoriteUseCase(character)
             .catch { e -> e.printStackTrace() }
             .launchIn(viewModelScope)
