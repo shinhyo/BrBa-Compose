@@ -9,6 +9,9 @@ internal fun Project.configureKoverAndroid() {
     pluginManager.apply("org.jetbrains.kotlinx.kover")
 
     extensions.configure<KoverProjectExtension> {
+
+//        useJacoco()
+
         reports {
             filters {
                 includes {
@@ -21,18 +24,14 @@ internal fun Project.configureKoverAndroid() {
 
             variant("debug") {
                 html {
-                    title = "Debug variant coverage report"
+                    onCheck = true
+                }
 
+                xml {
+                    onCheck = true
                 }
             }
 
-
-        }
-
-        currentProject {
-            instrumentation {
-                disabledForTestTasks.addAll("testReleaseUnitTest")
-            }
         }
 
     }
