@@ -1,10 +1,13 @@
 import io.github.shinhyo.brba.buildlogic.androidExtension
+import io.github.shinhyo.brba.buildlogic.configureKoverAndroid
 import io.github.shinhyo.brba.buildlogic.findLibrary
 
 with(pluginManager) {
     apply("brba.android.library.compose")
     apply("org.jetbrains.kotlin.plugin.serialization")
 }
+
+configureKoverAndroid()
 
 androidExtension.apply {
 
