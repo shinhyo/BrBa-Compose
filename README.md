@@ -24,10 +24,13 @@
     - Room - Create, store, and manage persistent data backed by a SQLite database.
     - ViewModel - Store and manage UI-related data in a lifecycle conscious.
     - App Startup - initialize components at app startup.
-- Clean Architecture (nowinandroid)
+- Clean Architecture (multi module)
 - MVVM pattern
-- Kotlin Coroutines & Flows & Serialization
-- Type Safety Navigation(2.8.0-beta07)
+- Kotlin
+  - Coroutines
+  - Flows
+  - Serialization
+- [Type Safety Navigation](https://developer.android.com/guide/navigation/design/type-safety)
 - Material Design 3
   - [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/)
 - Single Activity
@@ -38,6 +41,7 @@
 - [Timber](https://github.com/JakeWharton/timber)
 - [Haze](https://github.com/chrisbanes/haze)
 - [SharedElement](https://developer.android.com/guide/fragments/animate#shared)
+- [Kover](https://github.com/Kotlin/kotlinx-kover)
 
 ## Multi Module
 
