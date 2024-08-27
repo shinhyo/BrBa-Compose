@@ -59,7 +59,7 @@ jobs:
           ./gradlew koverXmlReportDebug
 
       - name: Display local test coverage
-        uses: madrapps/jacoco-report@v1
+        uses: madrapps/jacoco-report@v1.6.1
         with:
           title: test coverage report
           min-coverage-overall: 40
@@ -68,7 +68,7 @@ jobs:
           skip-if-no-changes: true
           continue-on-error: false
           paths: |
-            ${{ github.workspace }}/**/build/reports/kover/reportDebug.xml
+            ${{ github.workspace }}/feature/**/build/reports/kover/reportDebug.xml
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload lint reports
