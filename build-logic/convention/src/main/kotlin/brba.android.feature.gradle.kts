@@ -1,9 +1,13 @@
 import io.github.shinhyo.brba.buildlogic.androidExtension
+import io.github.shinhyo.brba.buildlogic.configureKoverAndroid
 import io.github.shinhyo.brba.buildlogic.findLibrary
 
 with(pluginManager) {
     apply("brba.android.library.compose")
+    apply("org.jetbrains.kotlin.plugin.serialization")
 }
+
+configureKoverAndroid()
 
 androidExtension.apply {
 
@@ -12,6 +16,8 @@ androidExtension.apply {
         add("implementation", project(":core:designsystem"))
         add("implementation", project(":core:common"))
         add("implementation", project(":core:domain"))
+
+        add("implementation", findLibrary("kotlinx.serialization.json"))
 
         add("implementation", findLibrary("coil.kt.compose"))
 
@@ -24,6 +30,8 @@ androidExtension.apply {
         add("implementation", findLibrary("androidx.hilt.navigation.compose"))
         add("implementation", findLibrary("androidx.lifecycle.runtimeCompose"))
         add("implementation", findLibrary("androidx.lifecycle.viewModelCompose"))
+
+        add("testImplementation", project(":core:testing"))
     }
 
 }

@@ -2,8 +2,8 @@
 
 <p align="center">
   <a href='https://developer.android.com'><img src='http://img.shields.io/badge/platform-android-green.svg'/></a>
-  <a href="https://kotlinlang.org/docs/whatsnew1920.html"><img src = "https://shields.io/badge/kotlin-2.0.10-blue" /></a>
-  <a href="https://developer.android.com/jetpack/compose/bom"><img src = "https://img.shields.io/badge/jetpack%20compose-2024.06.00-brightgreen" /></a>
+  <a href="https://kotlinlang.org/docs/whatsnew1920.html"><img src = "https://shields.io/badge/kotlin-2.0.20-blue" /></a>
+  <a href="https://developer.android.com/jetpack/compose/bom"><img src = "https://img.shields.io/badge/jetpack%20compose-2024.08.00-brightgreen" /></a>
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg"/></a>
 </p>
 
@@ -24,9 +24,13 @@
     - Room - Create, store, and manage persistent data backed by a SQLite database.
     - ViewModel - Store and manage UI-related data in a lifecycle conscious.
     - App Startup - initialize components at app startup.
-- Clean Architecture (nowinandroid)
+- Clean Architecture (multi module)
 - MVVM pattern
-- Kotlin Coroutines & Flows
+- Kotlin
+  - Coroutines
+  - Flows
+  - Serialization
+- [Type Safety Navigation](https://developer.android.com/guide/navigation/design/type-safety)
 - Material Design 3
   - [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/)
 - Single Activity
@@ -37,6 +41,7 @@
 - [Timber](https://github.com/JakeWharton/timber)
 - [Haze](https://github.com/chrisbanes/haze)
 - [SharedElement](https://developer.android.com/guide/fragments/animate#shared)
+- [Kover](https://github.com/Kotlin/kotlinx-kover)
 
 ## Multi Module
 

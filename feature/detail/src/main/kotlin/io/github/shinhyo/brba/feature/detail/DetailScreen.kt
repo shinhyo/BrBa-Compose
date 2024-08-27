@@ -18,23 +18,19 @@ package io.github.shinhyo.brba.feature.detail
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.SharedTransitionScope
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -56,6 +52,7 @@ import coil.request.ImageRequest
 import io.github.shinhyo.brba.core.model.BrbaCharacter
 import io.github.shinhyo.brba.core.theme.BrbaPreviewTheme
 import io.github.shinhyo.brba.core.ui.BrBaCircleProgress
+import io.github.shinhyo.brba.core.ui.BrbaChips
 import io.github.shinhyo.brba.core.ui.BrbaIconFavorite
 import io.github.shinhyo.brba.core.utils.brbaSharedElement
 
@@ -65,11 +62,13 @@ fun SharedTransitionScope.DetailRoute(
     animatedVisibilityScope: AnimatedVisibilityScope,
     viewModel: DetailViewModel = hiltViewModel(),
 ) {
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val imageState by viewModel.imageState.collectAsStateWithLifecycle()
+    val infoState by viewModel.infoState.collectAsStateWithLifecycle()
 
     DetailScreen(
         modifier = modifier.statusBarsPadding(),
-        uiState = uiState,
+        infoState = infoState,
+        imageState = imageState,
         animatedVisibilityScope = animatedVisibilityScope,
         onFavoriteClick = viewModel::updateFavorite,
     )
@@ -78,7 +77,8 @@ fun SharedTransitionScope.DetailRoute(
 @Composable
 private fun SharedTransitionScope.DetailScreen(
     modifier: Modifier = Modifier,
-    uiState: DetailUiState,
+    infoState: DetailInfoState,
+    imageState: Pair<Long, String>,
     animatedVisibilityScope: AnimatedVisibilityScope,
     onFavoriteClick: (BrbaCharacter) -> Unit,
 ) {
@@ -89,29 +89,86 @@ private fun SharedTransitionScope.DetailScreen(
             modifier = modifier
                 .fillMaxSize()
                 .padding(padding),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            items(uiState.items) { detailListType ->
-                when (val type: DetailListType = detailListType) {
-                    is DetailListType.Loading -> {
-                        BrBaCircleProgress()
+            item {
+                CharacterImage(
+                    animatedVisibilityScope = animatedVisibilityScope,
+                    imageState = imageState,
+                )
+            }
+
+            when (val info: DetailInfoState = infoState) {
+                is DetailInfoState.Loading -> {
+                    item {
+                        BrBaCircleProgress(modifier = Modifier)
+                    }
+                }
+
+                is DetailInfoState.Success -> {
+                    val character = info.character
+                    item {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = character.name,
+                                style = MaterialTheme.typography.headlineLarge,
+                                fontWeight = FontWeight.Bold,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                modifier = Modifier
+                                    .weight(1.0f),
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            BrbaIconFavorite(
+                                enable = character.isFavorite,
+                                modifier = Modifier
+                                    .size(24.dp),
+                            ) {
+                                onFavoriteClick.invoke(character)
+                            }
+                        }
                     }
 
-                    is DetailListType.Image -> {
-                        CharacterImage(
-                            animatedVisibilityScope = animatedVisibilityScope,
-                            type = type,
+                    item {
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp),
+                            text = character.nickname,
+                            style = MaterialTheme.typography.headlineSmall,
                         )
                     }
 
-                    is DetailListType.Description -> {
-                        Description(
-                            character = type.character,
-                            onFavoriteClick = onFavoriteClick,
+                    if (character.category.isNotEmpty()) {
+                        item {
+                            BrbaChips(
+                                modifier = Modifier
+                                    .padding(horizontal = 16.dp),
+                                chipList = character.category.map { "#$it" },
+                            )
+                        }
+                    }
+
+                    item {
+                        Text(
+                            modifier = Modifier
+                                .padding(horizontal = 16.dp),
+                            text = character.description,
+                            style = MaterialTheme.typography.bodyMedium,
                         )
                     }
 
-                    is DetailListType.Error -> {
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
+                }
+
+                is DetailInfoState.Error -> {
+                    // TODO:
                 }
             }
         }
@@ -120,105 +177,28 @@ private fun SharedTransitionScope.DetailScreen(
 
 @Composable
 private fun SharedTransitionScope.CharacterImage(
+    modifier: Modifier = Modifier,
     animatedVisibilityScope: AnimatedVisibilityScope,
-    type: DetailListType.Image,
+    imageState: Pair<Long, String>,
 ) {
+    val (id, image) = imageState
     AsyncImage(
         model = ImageRequest.Builder(LocalContext.current)
-            .data(type.image)
+            .data(image)
             .build(),
         contentScale = ContentScale.Crop,
         contentDescription = null,
         alignment = Alignment.TopCenter,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .aspectRatio(1f / 1.4f)
             .brbaSharedElement(
                 isLocalInspectionMode = LocalInspectionMode.current,
                 animatedVisibilityScope = animatedVisibilityScope,
-                rememberSharedContentState(key = "character_${type.id}_row"),
-                rememberSharedContentState(key = "character_${type.id}_card"),
+                rememberSharedContentState(key = "character_${id}_row"),
+                rememberSharedContentState(key = "character_${id}_card"),
             ),
     )
-}
-
-@Composable
-private fun Description(
-    character: BrbaCharacter,
-    onFavoriteClick: (BrbaCharacter) -> Unit,
-) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(16.dp),
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-        ) {
-            Text(
-                text = character.name,
-                style = MaterialTheme.typography.headlineLarge,
-                fontWeight = FontWeight.Bold,
-                maxLines = 2,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier
-                    .weight(1.0f),
-            )
-            Spacer(modifier = Modifier.width(4.dp))
-            BrbaIconFavorite(
-                enable = character.isFavorite,
-                modifier = Modifier
-                    .size(24.dp),
-            ) {
-                onFavoriteClick.invoke(character)
-            }
-        }
-
-        Spacer(modifier = Modifier.width(4.dp))
-
-        Text(
-            text = character.nickname,
-            style = MaterialTheme.typography.headlineSmall,
-        )
-        Spacer(modifier = Modifier.width(4.dp))
-
-        val category = character.category
-        if (category.isEmpty()) return
-        if (category.contains(",")) {
-            Chips(category.split(",").map { "#${it.trim()}" })
-        } else {
-            Chips(listOf("#$category"))
-        }
-    }
-}
-
-@Composable
-private fun Chips(
-    textList: List<String>,
-    modifier: Modifier = Modifier,
-) {
-    FlowRow(
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        textList.forEachIndexed { index, text ->
-            if (index != 0) Spacer(modifier = modifier.width(4.dp))
-            AssistChip(
-                onClick = { },
-                label = {
-                    Text(
-                        text = text,
-                        style = MaterialTheme.typography.labelSmall,
-                        color = MaterialTheme.colorScheme.tertiary,
-                    )
-                },
-                shape = RoundedCornerShape(16.dp),
-                colors = AssistChipDefaults.assistChipColors(
-                    containerColor = MaterialTheme.colorScheme.onTertiary,
-                ),
-                modifier = Modifier.padding(0.dp),
-            )
-        }
-    }
 }
 
 @Preview
@@ -228,29 +208,40 @@ private fun Preview() {
     BrbaPreviewTheme {
         DetailScreen(
             animatedVisibilityScope = it,
-            uiState = DetailUiState.Success(
-                listOf(
-                    DetailListType.Image(
-                        id = 8569,
-                        image = "https://~~~.jpg",
+            infoState = DetailInfoState.Success(
+                character = BrbaCharacter(
+                    charId = 0,
+                    name = "Walter White Walter White Walter White Walter White Walter White",
+                    birthday = "09-07-1958",
+                    img = "https://~~~.jpg",
+                    status = "Presumed dead",
+                    nickname = "Heisenberg, Heisenberg, Heisenberg",
+                    portrayed = "",
+                    category = listOf(
+                        "Breaking Bad1",
+                        "Breaking Bad3",
+                        "Breaking Bad5",
+                        "Better Call Saul6",
                     ),
-                    DetailListType.Description(
-                        character = BrbaCharacter(
-                            charId = 0,
-                            name = "Walter White Walter White Walter White Walter White Walter White",
-                            birthday = "09-07-1958",
-                            img = "https://~~~.jpg",
-                            status = "Presumed dead",
-                            nickname = "Heisenberg, Heisenberg, Heisenberg, Heisenberg, Heisenberg, Heisenberg",
-                            portrayed = "",
-                            category = "Breaking Bad1, Call Saul2, Breaking Bad3, Better Call Saul4, Breaking Bad5, Better Call Saul6",
-                            ratio = 1.5f,
-                            isFavorite = false,
-                            ctime = null,
-                        ),
-                    ),
+                    description = "Walter Walter Walter Walter Walter Walter Walter Walter Walter Walter ",
+                    ratio = 1.5f,
+                    isFavorite = false,
                 ),
             ),
+            imageState = 0L to "",
+            onFavoriteClick = {},
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun PreviewLoading() {
+    BrbaPreviewTheme {
+        DetailScreen(
+            animatedVisibilityScope = it,
+            infoState = DetailInfoState.Loading,
+            imageState = 0L to "",
             onFavoriteClick = {},
         )
     }
