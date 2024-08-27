@@ -1,10 +1,9 @@
 name: Build
 
 on:
-  push:
+  pull_request:
     branches:
       - develop
-  pull_request:
 
 concurrency:
   group: build-${{ github.ref }}
@@ -13,7 +12,7 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    timeout-minutes: 30
 
     steps:
       - name: Checkout
@@ -51,7 +50,28 @@ jobs:
       - name: Check Spotless
         run: ./gradlew spotlessCheck --init-script gradle/init.gradle.kts --no-configuration-cache --stacktrace
 
-      - name: Upload build reports
+      - name: UnitTest
+        run: |
+          ./gradlew testDebugUnitTest --stacktrace
+
+      - name: Check Kover
+        run: |
+          ./gradlew koverXmlReportDebug
+
+      - name: Display local test coverage
+        uses: madrapps/jacoco-report@v1
+        with:
+          title: test coverage report
+          min-coverage-overall: 40
+          min-coverage-changed-files: 60
+          update-comment: true
+          skip-if-no-changes: true
+          continue-on-error: false
+          paths: |
+            ${{ github.workspace }}/**/build/reports/kover/reportDebug.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload lint reports
         if: always()
         uses: actions/upload-artifact@v3
         with:
