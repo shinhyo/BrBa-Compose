@@ -6,13 +6,13 @@ targetSdkVer = "34"
 minSdkVer = "28"
 
 androidGradlePlugin = "8.5.2"
-androidTools = "31.5.2"
+androidTools = "31.6.0"
 
 # https://github.com/JetBrains/kotlin/releases
 kotlin = "2.0.20"
 # https://github.com/google/ksp/releases
-ksp = "2.0.20-1.0.24"
-androidDesugarJdkLibs = "2.1.0"
+ksp = "2.0.20-1.0.25"
+androidDesugarJdkLibs = "2.1.2"
 
 kotlinxCoroutines = "1.8.1"
 kotlinxSerializationJson = "1.7.1"
@@ -20,20 +20,19 @@ kotlinxSerializationJson = "1.7.1"
 androidxCore = "1.13.1"
 androidxCoreSplashscreen = "1.0.1"
 androidxAppCompat = "1.7.0"
-androidxActivity = "1.9.1"
+androidxActivity = "1.9.2"
 androidxStartup = "1.1.1"
 androidxHiltNavigationCompose = "1.2.0"
-androidxLifecycle = "2.8.4"
+androidxLifecycle = "2.8.5"
 androidxDataStore = "1.1.1"
 
-androidxComposeBom = "2024.08.00"
-androidxCompose = "1.7.0-rc01"
+androidxComposeBom = "2024.09.00"
 androidxComposeMaterial3 = "1.1.2"
 
 hilt = "2.51.1"
 hiltExt = "1.0.0"
 
-androidxNavigation = "2.8.0-rc01"
+androidxNavigation = "2.8.0"
 
 junit4 = "4.13.2"
 androidxTestCore = "1.6.1"
@@ -95,7 +94,7 @@ androidx-compose-ui-testManifest = { group = "androidx.compose.ui", name = "ui-t
 androidx-compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling" }
 androidx-compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview" }
 androidx-compose-ui-util = { group = "androidx.compose.ui", name = "ui-util" }
-androidx-compose-animation = { group = "androidx.compose.animation", name = "animation", version.ref = "androidxCompose" }
+androidx-compose-animation = { group = "androidx.compose.animation", name = "animation" }
 
 # hilt
 hilt-android = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
