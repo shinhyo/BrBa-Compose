@@ -3,7 +3,7 @@
 <p align="center">
   <a href='https://developer.android.com'><img src='http://img.shields.io/badge/platform-android-green.svg'/></a>
   <a href="https://kotlinlang.org/docs/whatsnew1920.html"><img src = "https://shields.io/badge/kotlin-2.0.20-blue" /></a>
-  <a href="https://developer.android.com/jetpack/compose/bom"><img src = "https://img.shields.io/badge/jetpack%20compose-2024.08.00-brightgreen" /></a>
+  <a href="https://developer.android.com/jetpack/compose/bom"><img src = "https://img.shields.io/badge/jetpack%20compose-2024.09.00-brightgreen" /></a>
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/license-Apache%202.0-blue.svg"/></a>
 </p>
 
@@ -16,14 +16,14 @@
 ## Tech Stack
 
 - [Jetpack](https://developer.android.com/jetpack)
-    - Compose - Define your UI programmatically with composable functions that describe its shape
-      and data dependencies.
-    - Hilt - Extend the functionality of Dagger Hilt to enable dependency injection.
-    - Lifecycle - Build lifecycle-aware components that can adjust behavior based on the current
-      lifecycle state
-    - Room - Create, store, and manage persistent data backed by a SQLite database.
-    - ViewModel - Store and manage UI-related data in a lifecycle conscious.
-    - App Startup - initialize components at app startup.
+  - Compose - Define your UI programmatically with composable functions that describe its shape
+    and data dependencies.
+  - Hilt - Extend the functionality of Dagger Hilt to enable dependency injection.
+  - Lifecycle - Build lifecycle-aware components that can adjust behavior based on the current
+    lifecycle state
+  - Room - Create, store, and manage persistent data backed by a SQLite database.
+  - ViewModel - Store and manage UI-related data in a lifecycle conscious.
+  - App Startup - initialize components at app startup.
 - Clean Architecture (multi module)
 - MVVM pattern
 - Kotlin
@@ -65,5 +65,26 @@
     └── setting
 ```
 
-## Module Graphs
+The file structure is similar to Now in Android, but to follow Clean Architecture, the domain layer
+does not reference the data layer.
+
+## Nested NavHosts
+
+```mermaid
+graph TD
+    A[Main NavHost] --> B[BottomBar]
+    A --> C[Detail]
+    B --> D[Bottom NavHost]
+    D --> E[List]
+    D --> F[Favorite]
+    D --> G[Setting]
+```
+
+Even though using nested NavHosts makes things more complex, this approach was chosen to achieve screen transition animations similar to those between Activities.
+
+(One NavHost needs to manage how to hide the bottom navigation and apply animations during screen transitions.)
+
+# Module Graphs
+
 ![](project.dot.png)
+
