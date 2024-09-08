@@ -18,6 +18,7 @@ package io.github.shinhyo.brba.feature.detail
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.github.shinhyo.brba.core.common.result.Result
 import io.github.shinhyo.brba.core.common.result.asResult
@@ -47,12 +48,7 @@ class DetailViewModel @Inject constructor(
     private val updateFavoriteUseCase: UpdateFavoriteUseCase,
 ) : ViewModel() {
 
-    private val args: Detail by lazy {
-        Detail(
-            id = checkNotNull(savedStateHandle.get<Long>("id")),
-            image = checkNotNull(savedStateHandle.get<String>("image")),
-        )
-    }
+    private val args = savedStateHandle.toRoute<Detail>()
 
     private val _imageState = MutableStateFlow(args.id to args.image)
     val imageState = _imageState.asStateFlow()
